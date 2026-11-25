@@ -4,7 +4,7 @@
  * ・家計データは扱いません（家計データは IndexedDB に保存され、通信には一切使いません）。
  * ・アプリを更新したときは VERSION を変えると、次回起動時に新しい版へ入れ替わります。
  */
-var VERSION = '1.0.0';
+var VERSION = '1.1.0';
 var CACHE = 'kakeibo-' + VERSION;
 var ASSETS = ['./index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 

@@ -597,6 +597,9 @@ button.list-row:active { background: var(--fill); }
 .entry-amount { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 14px 0; padding: 8px 14px; background: var(--card); border-radius: 14px; min-height: 66px; flex: none; }
 .entry-cat { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; min-width: 0; white-space: nowrap; overflow: hidden; }
 .entry-cat .placeholder { color: var(--label3); font-weight: 500; font-size: 14px; }
+.nw { white-space: nowrap; }
+.row-title .nw { font-size: .88em; }
+.entry-cat .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .entry-yen { font-size: 40px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--label); line-height: 1.1; }
 .entry-yen small { font-size: .55em; margin-right: 2px; color: var(--label2); font-weight: 700; }
 .entry-yen.zero b { color: var(--label3); }
@@ -618,7 +621,8 @@ button.list-row:active { background: var(--fill); }
 .cat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 8px 10px 4px; overflow-y: auto; flex: 1 1 auto; min-height: 112px; align-content: start; -webkit-overflow-scrolling: touch; }
 .cat-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 1px; border-radius: 12px; border: 1.5px solid transparent; min-width: 0; }
 .cat-cell .cat-ic { width: 38px; height: 38px; font-size: 20px; }
-.cat-cell .cat-name { font-size: 11px; font-weight: 600; line-height: 1.2; text-align: center; word-break: keep-all; overflow-wrap: anywhere; max-height: 2.4em; overflow: hidden; }
+.cat-cell .cat-name { font-size: 11px; font-weight: 600; line-height: 1.2; text-align: center; word-break: keep-all; overflow-wrap: anywhere; max-height: 2.5em; overflow: hidden; }
+.cat-cell .cat-name small { display: block; font-size: 9px; font-weight: 600; line-height: 1.25; color: var(--label2); letter-spacing: -.03em; white-space: nowrap; }
 .cat-cell.on { background: var(--card); border-color: var(--c); }
 .cat-cell:active { background: var(--fill); }
 .keypad { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 52px); gap: 6px; padding: 8px 10px 10px; flex: none; }
@@ -648,6 +652,8 @@ button.list-row:active { background: var(--fill); }
 .alert-body { padding: 20px 16px 14px; text-align: center; overflow-y: auto; }
 .alert-body h2 { font-size: 17px; margin: 0 0 6px; font-weight: 700; }
 .alert-body p { font-size: 14px; margin: 0; line-height: 1.6; }
+.alert-body .mig-list { text-align: left; margin: 10px 0 0; padding: 0 0 0 1.1em; font-size: 13px; line-height: 1.5; color: var(--label2); }
+.alert-body .mig-list li { margin: 3px 0; }
 .alert-body .field { text-align: left; }
 .alert-btns { display: flex; border-top: .5px solid var(--sep); flex: none; }
 .alert-btns button { flex: 1; min-height: 48px; font-size: 17px; color: var(--accent); text-align: center; padding: 0 8px; }
@@ -1074,27 +1080,33 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
   }
 
   /* ---------------- 既定データ ---------------- */
+  // 支出カテゴリー：指定の15項目（この順番で表示）。IDは旧版と同じ意味のものを引き継ぎます。
   var DEFAULT_CATEGORIES = [
-    ['e_food', 'expense', '食費', '🍚', '#F28C28'],
-    ['e_daily', 'expense', '日用品', '🧻', '#34A853'],
-    ['e_housing', 'expense', '住居費', '🏠', '#3478F6'],
+    ['e_housing', 'expense', '家賃', '🏠', '#3478F6'],
     ['e_utility', 'expense', '水道光熱費', '💡', '#F5B800'],
-    ['e_comm', 'expense', '通信費', '📱', '#5E5CE6'],
-    ['e_transport', 'expense', '交通費', '🚃', '#1AA3C8'],
-    ['e_car', 'expense', '自動車・バイク', '🚗', '#9C6B3F'],
-    ['e_fun', 'expense', '娯楽費', '🎮', '#E8447A'],
+    ['e_comm', 'expense', '通信費（スマホ＋ネット）', '📱', '#5E5CE6'],
+    ['e_subsc', 'expense', 'サブスク', '📺', '#0EA5A4'],
+    ['e_insurance', 'expense', '保険料', '🛡️', '#64748B'],
+    ['e_pet', 'expense', 'ペット', '🐾', '#9C6B3F'],
+    ['e_food', 'expense', '食費（自炊）', '🍳', '#F28C28'],
+    ['e_eatout', 'expense', '外食', '🍽️', '#E5484D'],
+    ['e_konbini', 'expense', 'コンビニ', '🏪', '#84CC16'],
+    ['e_daily', 'expense', '日用品', '🧻', '#34A853'],
+    ['e_transport', 'expense', '交通費（自己負担）', '🚃', '#1AA3C8'],
+    ['e_fun', 'expense', '趣味・娯楽', '🎮', '#E8447A'],
     ['e_social', 'expense', '交際費', '🍻', '#A855F7'],
-    ['e_clothes', 'expense', '衣服・美容', '👕', '#D946B0'],
-    ['e_medical', 'expense', '医療費', '🏥', '#E5484D'],
-    ['e_edu', 'expense', '教育費', '📚', '#1F4E9A'],
-    ['e_insurance', 'expense', '保険', '🛡️', '#64748B'],
-    ['e_other', 'expense', 'その他', '📦', '#A1A1AA'],
+    ['e_clothes', 'expense', '被服・美容・医療', '👕', '#D946B0'],
+    ['e_reserve', 'expense', '臨時支出への積立', '💰', '#1F4E9A'],
     ['i_salary', 'income', '給与', '💴', '#2A78D6'],
     ['i_bonus', 'income', '賞与', '🎁', '#1BAF7A'],
     ['i_side', 'income', '副収入', '💼', '#6250D6'],
     ['i_extra', 'income', '臨時収入', '✨', '#EDA100'],
     ['i_other', 'income', 'その他', '📦', '#A1A1AA']
   ];
+  // 旧版（v1.0）のカテゴリーからの移行表
+  var CAT_SCHEMA = 2;
+  var V2_MERGE = { e_medical: 'e_clothes' };          // 医療費 → 被服・美容・医療
+  var V2_LEGACY = ['e_car', 'e_edu', 'e_other'];       // 新しい一覧に行き先がないもの
   var DEFAULT_METHODS = [
     ['m_cash', '現金', '💴'],
     ['m_credit', 'クレジットカード', '💳'],
@@ -1116,7 +1128,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     return {
       monthStartDay: 1, periodLabel: 'start', theme: 'system', fabSide: 'right',
       lastExpenseMethodId: 'm_cash', lastIncomeMethodId: 'm_bank',
-      installBannerDismissed: false, backupReminderDays: 30
+      installBannerDismissed: false, backupReminderDays: 30, catSchema: CAT_SCHEMA
     };
   }
   function normalizeSettings(s) {
@@ -1131,7 +1143,89 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     d.installBannerDismissed = !!s.installBannerDismissed;
     var r = Math.floor(Number(s.backupReminderDays));
     d.backupReminderDays = (r === 0 || r === 7 || r === 14 || r === 30 || r === 60) ? r : 30;
+    d.catSchema = s.catSchema === CAT_SCHEMA ? CAT_SCHEMA : 1;
     return d;
+  }
+
+  /* ---------------- カテゴリーの移行（旧版 → 指定の15項目） ----------------
+   * ・同じ意味のカテゴリーはIDを引き継ぎ、名前・アイコン・色・順番だけを揃える（明細・予算・定期収支はそのまま）
+   * ・「医療費」は「被服・美容・医療」にまとめる（明細・定期収支・ゴミ箱・予算額を移す。予算額は合算）
+   * ・行き先がない旧カテゴリーは、使われていれば非表示で残し（過去の明細はそのまま）、使われていなければ削除
+   * ・自分で追加したカテゴリーのうち、新しい15項目と同じ名前のものは1つにまとめる（例：自作の「ペット」）
+   * ・それ以外の自分で追加したカテゴリーと、収入カテゴリーは変更しない
+   * 入力を書き換えず、新しいデータを返す純粋関数です。 */
+  function migrateCategoriesV2(data) {
+    var report = { renamed: [], merged: [], deduped: [], added: [], hidden: [], removed: [] };
+    var newExpense = defaultCategories().filter(function (c) { return c.type === 'expense'; });
+    var pos = {}, defByName = {};
+    var normName = function (x) { return String(x || '').replace(/\s+/g, '').replace(/[(（]/g, '（').replace(/[)）]/g, '）').replace(/[+＋]/g, '＋'); };
+    newExpense.forEach(function (d, i) { pos[d.id] = i; defByName[normName(d.name)] = d.id; });
+    var cats = (data.categories || []).map(function (c) { return Object.assign({}, c); });
+    var byId = {};
+    cats.forEach(function (c) { byId[c.id] = c; });
+    newExpense.forEach(function (def) {
+      var cur = byId[def.id];
+      if (cur && cur.type === 'expense') {
+        if (cur.name !== def.name) report.renamed.push({ from: cur.name, to: def.name });
+        cur.name = def.name; cur.icon = def.icon; cur.color = def.color; cur.hidden = false;
+      } else if (!cur) {
+        var n = Object.assign({}, def);
+        cats.push(n); byId[n.id] = n;
+        report.added.push(def.name);
+      }
+    });
+    var remap = {};
+    Object.keys(V2_MERGE).forEach(function (oldId) {
+      if (byId[oldId] && byId[oldId].type === 'expense') {
+        remap[oldId] = V2_MERGE[oldId];
+        report.merged.push({ from: byId[oldId].name, to: byId[V2_MERGE[oldId]].name });
+      }
+    });
+    cats.forEach(function (c) {
+      if (c.type !== 'expense' || remap[c.id] || pos[c.id] !== undefined) return;
+      var to = defByName[normName(c.name)];
+      if (to) { remap[c.id] = to; report.deduped.push(c.name); }
+    });
+    var mapRef = function (x) {
+      if (!remap[x.categoryId]) return x;
+      var n = Object.assign({}, x); n.categoryId = remap[x.categoryId]; return n;
+    };
+    var txs = (data.transactions || []).map(mapRef);
+    var trash = Array.isArray(data.trash) ? data.trash.map(mapRef) : undefined;
+    var rules = (data.recurring || []).map(mapRef);
+    var budgets = normalizeBudgets(data.budgets);
+    var eachEntry = function (fn) { fn(budgets.default); Object.keys(budgets.months).forEach(function (k) { fn(budgets.months[k]); }); };
+    eachEntry(function (entry) {
+      Object.keys(remap).forEach(function (oldId) {
+        if (entry.cats[oldId] === undefined) return;
+        var to = remap[oldId], sum = (entry.cats[to] || 0) + entry.cats[oldId];
+        if (isValidAmount(sum)) entry.cats[to] = sum;
+        delete entry.cats[oldId];
+      });
+    });
+    cats = cats.filter(function (c) { return !remap[c.id]; });
+    var used = {};
+    txs.forEach(function (t) { used[t.categoryId] = true; });
+    if (trash) trash.forEach(function (t) { used[t.categoryId] = true; });
+    rules.forEach(function (r) { used[r.categoryId] = true; });
+    cats = cats.filter(function (c) {
+      if (c.type !== 'expense' || V2_LEGACY.indexOf(c.id) < 0) return true;
+      if (used[c.id]) {
+        if (!c.hidden) { c.hidden = true; report.hidden.push(c.name); }
+        return true;
+      }
+      report.removed.push(c.name);
+      eachEntry(function (entry) { delete entry.cats[c.id]; });
+      return false;
+    });
+    var others = cats.filter(function (c) { return c.type === 'expense' && pos[c.id] === undefined; })
+      .sort(function (a, b) { return ((a.hidden ? 1 : 0) - (b.hidden ? 1 : 0)) || ((a.order || 0) - (b.order || 0)); });
+    others.forEach(function (c, i) { c.order = newExpense.length + i; });
+    cats.forEach(function (c) { if (pos[c.id] !== undefined) c.order = pos[c.id]; });
+    var settings = Object.assign({}, data.settings || {}, { catSchema: CAT_SCHEMA });
+    var out = { categories: cats, transactions: txs, recurring: rules, budgets: budgets, settings: settings, methods: data.methods };
+    if (trash) out.trash = trash;
+    return { data: out, report: report };
   }
 
   /* ---------------- 入力値の検証 ---------------- */
@@ -1414,7 +1508,8 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     for (var d = start; d <= today; d = addDays(d, 1)) {
       var dow = dayOfWeek(d);
       var day = parseYMD(d).d;
-      if (rnd() < 0.62) add(d, 'expense', 'e_food', between(380, 1200), pick(['m_cash', 'm_qr', 'm_emoney']), pick(['ランチ', 'コンビニ', 'パン屋', 'カフェ']));
+      if (rnd() < 0.35) add(d, 'expense', 'e_eatout', between(780, 1400), pick(['m_cash', 'm_qr', 'm_emoney']), pick(['ランチ', 'カフェ', '定食屋']));
+      if (rnd() < 0.30) add(d, 'expense', 'e_konbini', between(150, 900), pick(['m_emoney', 'm_qr']), pick(['飲み物', 'おにぎり', 'お菓子']));
       if (dow === 6 || dow === 3) add(d, 'expense', 'e_food', between(2800, 6800), pick(['m_credit', 'm_qr']), 'スーパー');
       if (rnd() < 0.12) add(d, 'expense', 'e_daily', between(400, 2600), pick(['m_cash', 'm_qr', 'm_credit']), pick(['ドラッグストア', '100円ショップ', '洗剤・ティッシュ']));
       if (rnd() < 0.10) add(d, 'expense', 'e_transport', between(180, 1200), 'm_emoney', pick(['電車', 'バス']));
@@ -1422,17 +1517,20 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       if ((dow === 0 || dow === 6) && rnd() < 0.3) add(d, 'expense', 'e_fun', between(800, 4500), pick(['m_credit', 'm_qr']), pick(['映画', '本', 'ゲーム', 'スポーツ用品']));
       if (day === 15) add(d, 'expense', 'e_utility', between(7200, 11800, 1), 'm_credit', '電気・ガス');
       if (day === 20) add(d, 'expense', 'e_utility', between(2800, 3600, 1), 'm_bank', '水道');
-      if (day === 10) add(d, 'expense', 'e_comm', 4980, 'm_credit', 'スマホ');
-      if (day === 12 && rnd() < 0.7) add(d, 'expense', 'e_car', between(3500, 5200), 'm_credit', 'ガソリン');
+      if (day === 10) { add(d, 'expense', 'e_comm', 4980, 'm_credit', 'スマホ'); add(d, 'expense', 'e_comm', 5280, 'm_credit', 'ネット'); }
+      if (day === 3) add(d, 'expense', 'e_subsc', 1490, 'm_credit', '動画配信');
+      if (day === 17) add(d, 'expense', 'e_subsc', 1080, 'm_credit', '音楽配信');
+      if (day === 22 && rnd() < 0.6) add(d, 'expense', 'e_pet', between(1800, 3200), 'm_credit', 'ペットフード');
       if (day === 18 && rnd() < 0.5) add(d, 'expense', 'e_clothes', between(2500, 8900), 'm_credit', pick(['シャツ', '美容院', 'シューズ']));
-      if (day === 8 && rnd() < 0.4) add(d, 'expense', 'e_medical', between(800, 2400), 'm_cash', '通院');
+      if (day === 8 && rnd() < 0.4) add(d, 'expense', 'e_clothes', between(800, 2400), 'm_cash', '通院');
     }
     var rules = [
       { id: idGen(), type: 'income', amount: 265000, categoryId: 'i_salary', methodId: 'm_bank', memo: '給与（サンプル）', day: 25, startMonth: startMonth, endMonth: null, active: true, lastMonth: null, createdAt: now, sample: true },
       { id: idGen(), type: 'expense', amount: 72000, categoryId: 'e_housing', methodId: 'm_bank', memo: '家賃（サンプル）', day: 27, startMonth: startMonth, endMonth: null, active: true, lastMonth: null, createdAt: now, sample: true },
-      { id: idGen(), type: 'expense', amount: 6200, categoryId: 'e_insurance', methodId: 'm_credit', memo: '保険料（サンプル）', day: 5, startMonth: startMonth, endMonth: null, active: true, lastMonth: null, createdAt: now, sample: true }
+      { id: idGen(), type: 'expense', amount: 6200, categoryId: 'e_insurance', methodId: 'm_credit', memo: '保険料（サンプル）', day: 5, startMonth: startMonth, endMonth: null, active: true, lastMonth: null, createdAt: now, sample: true },
+      { id: idGen(), type: 'expense', amount: 10000, categoryId: 'e_reserve', methodId: 'm_bank', memo: '臨時支出への積立（サンプル）', day: 25, startMonth: startMonth, endMonth: null, active: true, lastMonth: null, createdAt: now, sample: true }
     ];
-    var budgets = { total: 200000, cats: { e_food: 45000, e_daily: 8000, e_fun: 10000, e_social: 15000 } };
+    var budgets = { total: 200000, cats: { e_food: 30000, e_eatout: 15000, e_konbini: 6000, e_fun: 10000, e_social: 15000 } };
     return { transactions: txs, recurring: rules, budget: budgets };
   }
 
@@ -1463,7 +1561,8 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     cleanText: cleanText, validateTx: validateTx, normalizeTx: normalizeTx, normalizeCategory: normalizeCategory,
     normalizeMethod: normalizeMethod, normalizeRule: normalizeRule,
     csvCell: csvCell, toCSV: toCSV, buildBackup: buildBackup, payloadString: payloadString, validateBackup: validateBackup, mergeData: mergeData,
-    makeSampleData: makeSampleData, uuid: uuid
+    makeSampleData: makeSampleData, uuid: uuid,
+    CAT_SCHEMA: CAT_SCHEMA, migrateCategoriesV2: migrateCategoriesV2
   };
 }));
 
@@ -1691,7 +1790,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
 (function () {
   'use strict';
   var K = window.KCore, DB = window.KDB;
-  var APP_VERSION = '1.0.0';
+  var APP_VERSION = '1.1.0';
 
   /* ================= 小さな道具 ================= */
   function esc(s) {
@@ -1812,10 +1911,11 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
   }
   function visibleCats(type) { return S.cats.filter(function (c) { return c.type === type && !c.hidden; }); }
   function visibleMethods() { return S.methods.filter(function (m) { return !m.hidden; }); }
-  function fallbackCategoryId(type) {
+  function fallbackCategoryId(type, exceptId) {
     var id = type === 'income' ? 'i_other' : 'e_other';
-    if (S.catMap[id] && S.catMap[id].type === type) return id;
-    var c = find(S.cats, function (x) { return x.type === type; });
+    if (id !== exceptId && S.catMap[id] && S.catMap[id].type === type && !S.catMap[id].hidden) return id;
+    var c = find(S.cats, function (x) { return x.type === type && !x.hidden && x.id !== exceptId; }) ||
+      find(S.cats, function (x) { return x.type === type && x.id !== exceptId; });
     return c ? c.id : id;
   }
   function txDescCmp(a, b) {
@@ -2002,6 +2102,36 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       var n = results.filter(function (x) { return x === true; }).length;
       return loadAll().then(function () { recurringRunning = false; afterChange(); return n; });
     }, function (e) { recurringRunning = false; console.warn('recurring', e); return 0; });
+  }
+
+  /* --- 旧版（v1.0）のカテゴリーを指定の15項目に揃える（1回だけ。明細は消さない） --- */
+  function migrateIfNeeded() {
+    if (S.settings.catSchema === K.CAT_SCHEMA) return Promise.resolve(null);
+    var m = K.migrateCategoriesV2({ categories: S.cats, transactions: S.tx, recurring: S.rules, budgets: S.budgets, settings: S.settings, trash: S.trash, methods: S.methods });
+    var ops = [], keep = {};
+    m.data.categories.forEach(function (c) { keep[c.id] = true; ops.push({ type: 'put', store: 'categories', value: c }); });
+    S.cats.forEach(function (c) { if (!keep[c.id]) ops.push({ type: 'delete', store: 'categories', key: c.id }); });
+    m.data.transactions.forEach(function (t, i) { if (t !== S.tx[i]) ops.push({ type: 'put', store: 'transactions', value: t }); });
+    m.data.recurring.forEach(function (r, i) { if (r !== S.rules[i]) ops.push({ type: 'put', store: 'recurring', value: r }); });
+    (m.data.trash || []).forEach(function (t, i) { if (t !== S.trash[i]) ops.push({ type: 'put', store: 'trash', value: t }); });
+    ops.push(kvOp('budgets', m.data.budgets));
+    ops.push(kvOp('settings', K.normalizeSettings(m.data.settings)));
+    return DB.write(ops).then(loadAll).then(function () { return m.report; });
+  }
+  function migrationNotes(rep) {
+    var items = [];
+    rep.renamed.forEach(function (x) { items.push('「' + x.from + '」→「' + x.to + '」'); });
+    rep.merged.forEach(function (x) { items.push('「' + x.from + '」の明細は「' + x.to + '」にまとめました'); });
+    if (rep.deduped.length) items.push('自分で追加した「' + rep.deduped.join('」「') + '」は、同じ名前の新しいカテゴリーにまとめました');
+    if (rep.added.length) items.push('新しく追加：' + rep.added.join('、'));
+    if (rep.hidden.length) items.push('明細のある「' + rep.hidden.join('」「') + '」は入力画面から隠して残しています（設定 → カテゴリー で再表示できます）');
+    if (rep.removed.length) items.push('使っていなかった「' + rep.removed.join('」「') + '」は削除しました');
+    return items;
+  }
+  function showMigrationNotice(rep, lead) {
+    var items = migrationNotes(rep);
+    return alertDialog({ title: 'カテゴリーを新しくしました', message: esc(lead),
+      extra: items.length ? '<ul class="mig-list">' + items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '' });
   }
 
   /* --- 設定・予算 --- */
@@ -2292,7 +2422,19 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     html += '</ul></section>';
     return html;
   }
-  function wbrName(name) { return esc(name).replace(/([・\/／])/g, '$1<wbr>'); }
+  // 「交通費（自己負担）」→ 1行目「交通費」・2行目に小さく「自己負担」
+  function gridName(name) {
+    var m = /^(.+?)[（(](.+)[）)]$/.exec(String(name));
+    return m ? wbrName(m[1]) + '<small>' + esc(m[2]) + '</small>' : wbrName(name);
+  }
+  // 一覧用：「通信費（スマホ＋ネット）」が1行に収まらないときは、かっこの前で折り返す
+  function listName(name) {
+    return esc(name).replace(/（([^（）]*)）/g, '<wbr><span class="nw">（$1）</span>');
+  }
+  // 折り返し位置の候補：「・」「/」の後、「への・での・との」の前、「の」の後（例：臨時支出／への積立）
+  function wbrName(name) {
+    return esc(name).replace(/([・\/／])/g, '$1<wbr>').replace(/(.)(への|での|との)/g, '$1<wbr>$2').replace(/の(?=[^<])/g, 'の<wbr>');
+  }
   function isLightColor(hex) {
     if (!/^#[0-9a-f]{6}$/i.test(hex)) return false;
     var r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16);
@@ -2867,7 +3009,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       html += '<section class="group"><h2 class="group-h">カテゴリー別の予算</h2><div class="list">';
       S.cats.filter(function (c) { return c.type === 'expense' && (!c.hidden || f.cats[c.id]); }).forEach(function (c) {
         var v = f.cats[c.id], s2 = K.budgetStatus(spentBy[c.id] || 0, v);
-        html += '<div class="list-row input-row tall"><span class="cat-ic sm" style="--c:' + c.color + '">' + esc(c.icon) + '</span><span class="row-title">' + esc(c.name) +
+        html += '<div class="list-row input-row tall"><span class="cat-ic sm" style="--c:' + c.color + '">' + esc(c.icon) + '</span><span class="row-title">' + listName(c.name) +
           '<small>' + yen(spentBy[c.id] || 0) + (s2 ? '（' + Math.floor(s2.rate) + '%）' : '') + '</small>' + (s2 ? meter(s2.rate, s2.level) : '') + '</span>' +
           '<span class="yen-input">¥<input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="なし" value="' + (v ? K.formatNum(v) : '') + '" data-input="bud-amount" data-k="' + esc(c.id) + '" aria-label="' + esc(c.name) + 'の予算"></span></div>';
       });
@@ -2899,7 +3041,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       var html = '<div class="seg-wrap">' + seg('cat-type', [['expense', '支出'], ['income', '収入']], type) + '</div><div class="list">';
       list.forEach(function (c, i) {
         html += '<div class="list-row"><span class="cat-ic" style="--c:' + c.color + '">' + esc(c.icon) + '</span>' +
-          '<button class="row-title as-btn" data-action="cat-edit" data-id="' + esc(c.id) + '">' + esc(c.name) + (c.hidden ? '<span class="badge">非表示</span>' : '') + '<small>' + (used[c.id] || 0) + '件</small></button>' +
+          '<button class="row-title as-btn" data-action="cat-edit" data-id="' + esc(c.id) + '">' + listName(c.name) + (c.hidden ? '<span class="badge">非表示</span>' : '') + '<small>' + (used[c.id] || 0) + '件</small></button>' +
           '<span class="order-btns"><button class="mini-btn" data-action="cat-move" data-id="' + esc(c.id) + '" data-d="-1" aria-label="上へ"' + (i === 0 ? ' disabled' : '') + '>' + icon('up') + '</button>' +
           '<button class="mini-btn" data-action="cat-move" data-id="' + esc(c.id) + '" data-d="1" aria-label="下へ"' + (i === list.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button></span></div>';
       });
@@ -3026,7 +3168,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       html += '<div class="list">';
       S.trash.slice().sort(function (a, b) { return a.deletedAt < b.deletedAt ? 1 : -1; }).forEach(function (t) {
         var c = catOf(t.categoryId);
-        html += '<div class="list-row"><span class="cat-ic" style="--c:' + c.color + '">' + esc(c.icon) + '</span><span class="row-title">' + esc(c.name) + ' <span class="' + t.type + '-t">' + (t.type === 'income' ? '+' : '') + yen(t.amount) + '</span>' +
+        html += '<div class="list-row"><span class="cat-ic" style="--c:' + c.color + '">' + esc(c.icon) + '</span><span class="row-title">' + listName(c.name) + ' <span class="' + t.type + '-t">' + (t.type === 'income' ? '+' : '') + yen(t.amount) + '</span>' +
           '<small>' + esc(K.formatDateJa(t.date, true)) + (t.memo ? '・' + esc(t.memo) : '') + '<br>削除：' + esc(fmtDateTime(t.deletedAt)) + '</small></span>' +
           '<button class="btn small" data-action="trash-restore" data-id="' + esc(t.id) + '">戻す</button></div>';
       });
@@ -3167,7 +3309,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     var len = K.formatNum(n).length;
     el.parentNode.style.fontSize = len > 11 ? '30px' : len > 9 ? '34px' : '';
     var c = E.categoryId ? catOf(E.categoryId) : null;
-    $('#entry-cat').innerHTML = c ? '<span class="cat-ic sm" style="--c:' + c.color + '">' + esc(c.icon) + '</span>' + esc(c.name) : '<span class="placeholder">カテゴリー未選択</span>';
+    $('#entry-cat').innerHTML = c ? '<span class="cat-ic sm" style="--c:' + c.color + '">' + esc(c.icon) + '</span><span class="nm">' + esc(c.name) + '</span>' : '<span class="placeholder">カテゴリー未選択</span>';
   }
   function renderEntryDate() {
     var label = K.formatDateJa(E.date, E.date.slice(0, 4) !== S.today.slice(0, 4));
@@ -3187,7 +3329,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     var list = visibleCats(E.type);
     if (E.categoryId && S.catMap[E.categoryId] && S.catMap[E.categoryId].type === E.type && S.catMap[E.categoryId].hidden) list = list.concat([S.catMap[E.categoryId]]);
     $('#cat-grid').innerHTML = list.map(function (c) {
-      return '<button type="button" class="cat-cell' + (c.id === E.categoryId ? ' on' : '') + '" data-action="entry-cat" data-id="' + esc(c.id) + '" aria-pressed="' + (c.id === E.categoryId) + '" style="--c:' + c.color + '"><span class="cat-ic">' + esc(c.icon) + '</span><span class="cat-name">' + wbrName(c.name) + '</span></button>';
+      return '<button type="button" class="cat-cell' + (c.id === E.categoryId ? ' on' : '') + '" data-action="entry-cat" data-id="' + esc(c.id) + '" aria-pressed="' + (c.id === E.categoryId) + '" style="--c:' + c.color + '"><span class="cat-ic">' + esc(c.icon) + '</span><span class="cat-name">' + gridName(c.name) + '</span></button>';
     }).join('');
   }
   function entryError(msg) {
@@ -3510,6 +3652,8 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     return ops;
   }
   function applyRestore(data, mode) {
+    var mig = null;
+    if (!data.settings || data.settings.catSchema !== K.CAT_SCHEMA) { var mr = K.migrateCategoriesV2(data); data = mr.data; mig = mr.report; }
     var snap = { createdAt: nowISO(), reason: mode === 'replace' ? '復元（置き換え）' : '復元（統合）', data: currentPayload() };
     var target = data, stats = null;
     if (mode === 'merge') {
@@ -3525,6 +3669,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       return runRecurring();
     }).then(function () {
       toast(mode === 'replace' ? '復元しました（明細 ' + S.tx.length + '件）' : '統合しました（追加 ' + stats.addedTx + '件・重複のため除外 ' + stats.skippedTx + '件）', { duration: 5000 });
+      if (mig) showMigrationNotice(mig, '旧版のバックアップだったため、支出のカテゴリーを指定の15項目に揃えて取り込みました。明細と金額はそのまま残っています。');
     });
   }
   function restoreSnapshot() {
@@ -3535,7 +3680,8 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       if (!ok) return;
       var v = K.validateBackup({ app: K.APP_ID, format: K.BACKUP_FORMAT, data: snap.data });
       if (!v.ok) { alertDialog({ title: '戻せませんでした', message: esc(v.errors.join('\n')) }); return; }
-      var ops = replaceOps(v.data, null);
+      var snapData = v.data.settings.catSchema === K.CAT_SCHEMA ? v.data : K.migrateCategoriesV2(v.data).data;
+      var ops = replaceOps(snapData, null);
       ops.push({ type: 'delete', store: 'kv', key: 'snapshot' });
       return commit(ops).then(loadAll).then(function () { applyTheme(); applyFabSide(); afterChange(); toast('前の状態に戻しました'); });
     });
@@ -3563,8 +3709,8 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
   }
 
   /* ================= カテゴリー・支払い方法の編集 ================= */
-  var EMOJIS = ['🍚', '🍙', '🍞', '🥗', '🍱', '☕', '🍺', '🍻', '🛒', '🧻', '🧴', '🏠', '💡', '🔥', '💧', '📱', '💻', '🚃', '🚌', '🚕', '🚗', '⛽', '🏍️', '✈️', '🎮', '🎬', '🎵', '📚', '✏️', '🎓', '👕', '👟', '💇', '💄', '🏥', '💊', '🦷', '🛡️', '🐶', '👶', '🎁', '💐', '🏋️', '⚽', '🏀', '🎾', '🧾', '💳', '💴', '💰', '💼', '✨', '📈', '🏦', '📦', '🔧', '🌱', '🎉'];
-  var COLORS = ['#F28C28', '#34A853', '#3478F6', '#F5B800', '#5E5CE6', '#1AA3C8', '#9C6B3F', '#E8447A', '#A855F7', '#D946B0', '#E5484D', '#1F4E9A', '#64748B', '#1BAF7A', '#A1A1AA'];
+  var EMOJIS = ['🍳', '🍽️', '🏪', '📺', '🐾', '🍚', '🍙', '🍞', '🥗', '🍱', '☕', '🍺', '🍻', '🛒', '🧻', '🧴', '🏠', '💡', '🔥', '💧', '📱', '💻', '🚃', '🚌', '🚕', '🚗', '⛽', '🏍️', '✈️', '🎮', '🎬', '🎵', '📚', '✏️', '🎓', '👕', '👟', '💇', '💄', '🏥', '💊', '🦷', '🛡️', '🐶', '👶', '🎁', '💐', '🏋️', '⚽', '🏀', '🎾', '🧾', '💳', '💴', '💰', '💼', '✨', '📈', '🏦', '📦', '🔧', '🌱', '🎉'];
+  var COLORS = ['#0EA5A4', '#84CC16', '#F28C28', '#34A853', '#3478F6', '#F5B800', '#5E5CE6', '#1AA3C8', '#9C6B3F', '#E8447A', '#A855F7', '#D946B0', '#E5484D', '#1F4E9A', '#64748B', '#1BAF7A', '#A1A1AA'];
   function editCategory(id, type) {
     var c = id ? S.catMap[id] : null;
     var st = { name: c ? c.name : '', icon: c ? c.icon : '📦', color: c ? c.color : COLORS[S.cats.length % COLORS.length], hidden: c ? c.hidden : false, type: c ? c.type : type };
@@ -3611,6 +3757,8 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
   function deleteCategory(c) {
     var usedTx = S.tx.filter(function (t) { return t.categoryId === c.id; });
     var usedRules = S.rules.filter(function (r) { return r.categoryId === c.id; });
+    var usedTrash = S.trash.filter(function (t) { return t.categoryId === c.id; });
+    var trashOps = function (dest) { return usedTrash.map(function (t) { return { type: 'put', store: 'trash', value: Object.assign({}, t, { categoryId: dest }) }; }); };
     var others = S.cats.filter(function (x) { return x.type === c.type && x.id !== c.id; });
     if (!others.length) { alertDialog({ title: '削除できません', message: (c.type === 'expense' ? '支出' : '収入') + 'のカテゴリーは1つ以上必要です。' }); return; }
     var budgetOps = function () {
@@ -3622,13 +3770,13 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
     if (!usedTx.length && !usedRules.length) {
       alertDialog({ title: '「' + esc(c.name) + '」を削除しますか？', message: 'このカテゴリーの明細はありません。', buttons: [{ label: 'キャンセル', value: false, style: 'cancel' }, { label: '削除', value: true, style: 'destructive' }] }).then(function (ok) {
         if (!ok) return;
-        commit([{ type: 'delete', store: 'categories', key: c.id }].concat(budgetOps())).then(loadAll).then(function () { afterChange(); toast('カテゴリーを削除しました'); });
+        commit([{ type: 'delete', store: 'categories', key: c.id }].concat(budgetOps(), trashOps(fallbackCategoryId(c.type, c.id)))).then(loadAll).then(function () { afterChange(); toast('カテゴリーを削除しました'); });
       });
       return;
     }
     var visible = others.filter(function (x) { return !x.hidden; });
-    var to = fallbackCategoryId(c.type);
-    var opts = (visible.length ? visible : others).map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === fallbackCategoryId(c.type) ? ' selected' : '') + '>' + esc(x.icon + ' ' + x.name) + '</option>'; }).join('');
+    var to = fallbackCategoryId(c.type, c.id);
+    var opts = (visible.length ? visible : others).map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === to ? ' selected' : '') + '>' + esc(x.icon + ' ' + x.name) + '</option>'; }).join('');
     alertDialog({
       title: '「' + esc(c.name) + '」は使用中です',
       message: '明細 ' + usedTx.length + '件' + (usedRules.length ? '・定期収支 ' + usedRules.length + '件' : '') + 'で使われています。削除する場合は、移動先のカテゴリーを選んでください。入力画面から隠すだけなら「非表示」が便利です（過去の明細はそのまま残ります）。',
@@ -3644,7 +3792,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
         var ops = usedTx.map(function (t) { return { type: 'put', store: 'transactions', value: Object.assign({}, t, { categoryId: to, updatedAt: now }) }; });
         usedRules.forEach(function (r) { ops.push({ type: 'put', store: 'recurring', value: Object.assign({}, r, { categoryId: to }) }); });
         ops.push({ type: 'delete', store: 'categories', key: c.id });
-        ops = ops.concat(budgetOps());
+        ops = ops.concat(budgetOps(), trashOps(to));
         commit(ops).then(loadAll).then(function () { afterChange(); toast(usedTx.length + '件を「' + catOf(to).name + '」に移して削除しました'); });
       }
     });
@@ -4135,6 +4283,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
   }
 
   /* ================= 起動 ================= */
+  var migrated = null;
   function start() {
     detectEnv();
     applyTheme();
@@ -4149,6 +4298,10 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       S.storage.mode = res.mode; S.storage.reason = res.reason || '';
       return loadAll();
     }).then(seedIfNeeded).then(function () {
+      // 移行は1回の書き込みでまとめて行うため、失敗してもデータは元のまま。起動は続けて次回もう一度試します。
+      return migrateIfNeeded().catch(function (e) { console.warn('category migration skipped', e); return null; });
+    }).then(function (rep) {
+      migrated = rep;
       applyTheme(); applyFabSide();
       if (S.env.iframe && !S.meta.previewSeeded && !S.tx.length) {
         return saveMeta({ previewSeeded: true }).then(addSampleData);
@@ -4160,6 +4313,7 @@ body.fab-left .fab { right: auto; left: max(18px, env(safe-area-inset-left)); }
       renderActive();
       return runRecurring();
     }).then(function (n) {
+      if (migrated) showMigrationNotice(migrated, '支出のカテゴリーを指定の15項目に揃えました。これまでの明細と金額はそのまま残っています。');
       if (n) toast('固定費・定期収入を ' + n + '件 自動登録しました');
       if (S.tx.length) maybePersist();
       document.body.classList.add('ready');
